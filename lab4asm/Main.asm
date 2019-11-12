@@ -6,10 +6,10 @@ TITLE lab2
 	ExitProcess PROTO, dwExitCode:DWORD
 
 .data
-	FirstArr db 53, 55, 87, 85, 82, 78, 49, 39, 98, 4, 95, 38, 41, 81, 53, 89, 10, 74, 40, 2
-	SecondArr db 52, 53, 94, -11, -59, 39, -80, 19, 24, 46, -2, -30, 0, 82, 87, 13, -52, 63, 84, 50, 33, 93, -92, -53, 54, 99, -29, -60, 62, -51
-	ResultArr db 20 dup(?)
-	mindif db 127
+	FirstArr db -128, 55, 87, 85, 82, 78, 49, 39, 98, 4, 95, 38, 41, 81, 53, 89, 10, 74, 40, 2
+	SecondArr db 127, 53, 94, -11, -59, 39, -80, 19, 24, 46, -2, -30, 0, 82, 87, 13, -52, 63, 84, 50, 33, 93, -92, -53, 54, 99, -29, -60, 62, -51
+	ResultArr dw 20 dup(?)
+	mindif dw ?
 
 .code
 _main proc
@@ -23,30 +23,31 @@ _main proc
 
 	outer:
 		push cx
-		mov mindif, 127
+		mov mindif, 255
 		mov edi, 0
 		mov ecx, 30
 
 		inner:
-			mov al, FirstArr[esi]
-			sub al, SecondArr[edi]
+			movsx ax, FirstArr[esi]
+			movsx bx, SecondArr[edi]
+			sub ax, bx
 
-			cmp al, 0
+			cmp ax, 0
 			jg greater
-			neg al
+			neg ax
 
-			greater: cmp al, mindif
-			jge skip
-			mov mindif, al
-
+			greater: cmp ax, mindif
+			jg skip
+			mov mindif, ax
+			mov edx, edi
 			skip:
 			inc edi
 		loop inner
 
-		mov al, mindif
-		mov ResultArr[esi], al
-		inc esi
+		movsx ax, SecondArr[edx]
+		mov ResultArr[esi], ax
 
+		inc esi
 		pop cx
 	loop outer
 
