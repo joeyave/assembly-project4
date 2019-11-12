@@ -9,7 +9,7 @@ TITLE lab2
 	FirstArr db -128, 55, 87, 85, 82, 78, 49, 39, 98, 4, 95, 38, 41, 81, 53, 89, 10, 74, 40, 2
 	SecondArr db 127, 53, 94, -11, -59, 39, -80, 19, 24, 46, -2, -30, 0, 82, 87, 13, -52, 63, 84, 50, 33, 93, -92, -53, 54, 99, -29, -60, 62, -51
 	ResultArr dw 20 dup(?)
-	mindif dw ?
+	MinDif dw ?
 
 .code
 _main proc
@@ -22,8 +22,8 @@ _main proc
 	mov esi, 0
 
 	outer:
-		push cx
-		mov mindif, 255
+		push ecx
+		mov MinDif, 255
 		mov edi, 0
 		mov ecx, 30
 
@@ -36,9 +36,9 @@ _main proc
 			jg greater
 			neg ax
 
-			greater: cmp ax, mindif
+			greater: cmp ax, MinDif
 			jg skip
-			mov mindif, ax
+			mov MinDif, ax
 			mov edx, edi
 			skip:
 			inc edi
@@ -48,7 +48,7 @@ _main proc
 		mov ResultArr[esi], ax
 
 		inc esi
-		pop cx
+		pop ecx
 	loop outer
 
 	INVOKE ExitProcess, 0
